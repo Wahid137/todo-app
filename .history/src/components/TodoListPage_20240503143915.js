@@ -1,13 +1,13 @@
 import { joiResolver } from "@hookform/resolvers/joi";
 import Joi from "joi";
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Container, Icon, Message, Segment, Table } from 'semantic-ui-react';
 import initialTodos from "../data/todos.json";
-import { getArray, storeArray } from '../utils/store'; // Import the utility functions
 import AddTodoModal from './AddTodoModal';
 import ConfirmationModal from './ConfirmationModal';
 import EditTodoModal from './EditTodoModal';
+
 
 const schema = Joi.object({
     title: Joi.string().min(2).max(30).required().label("Title"),
@@ -15,7 +15,7 @@ const schema = Joi.object({
 });
 
 const TodoListPage = () => {
-    const [todos, setTodos] = useState([]);
+    const [todos, setTodos] = useState(initialTodos);
     const [deleteId, setDeleteId] = useState(null);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [openAddModal, setOpenAddModal] = useState(false);
@@ -25,15 +25,6 @@ const TodoListPage = () => {
     const [editTodo, setEditTodo] = useState(null);
     const [openEditModal, setOpenEditModal] = useState(false);
 
-    useEffect(() => {
-        const storedTodos = getArray('todos');
-        if (storedTodos) {
-            setTodos(storedTodos);
-        } else {
-            setTodos(initialTodos);
-            storeArray('todos', initialTodos);
-        }
-    }, []);
 
     const {
         register,
@@ -42,6 +33,7 @@ const TodoListPage = () => {
         formState: { errors },
     } = useForm({ resolver: joiResolver(schema) });
 
+
     const handleDelete = (id, title) => {
         setDeleteId(id);
         setTodoToDelete(title);
@@ -49,9 +41,7 @@ const TodoListPage = () => {
     };
 
     const handleConfirmDelete = () => {
-        const updatedTodos = todos.filter(todo => todo.id !== deleteId);
-        setTodos(updatedTodos);
-        storeArray('todos', updatedTodos); // Update todos in local storage
+        setTodos(todos.filter(todo => todo.id !== deleteId));
         setOpenDeleteModal(false);
         setShowMessage(true);
         setMessage('Todo deleted successfully.');
@@ -84,9 +74,7 @@ const TodoListPage = () => {
             title: data.title,
             description: data.description
         };
-        const updatedTodos = [...todos, newTodo];
-        setTodos(updatedTodos);
-        storeArray('todos', updatedTodos); // Update todos in local storage
+        setTodos([...todos, newTodo]);
         setOpenAddModal(false);
         setShowMessage(true);
         setMessage('Todo added successfully.');
@@ -103,7 +91,6 @@ const TodoListPage = () => {
             todo.id === editTodo.id ? { ...todo, title: data.title, description: data.description } : todo
         );
         setTodos(updatedTodos);
-        storeArray('todos', updatedTodos); // Update todos in local storage
         setOpenEditModal(false);
         setShowMessage(true);
         setMessage('Todo edited successfully.');

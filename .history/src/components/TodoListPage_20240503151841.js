@@ -26,12 +26,14 @@ const TodoListPage = () => {
     const [openEditModal, setOpenEditModal] = useState(false);
 
     useEffect(() => {
+        // Load todos from local storage when the component mounts
         const storedTodos = getArray('todos');
         if (storedTodos) {
             setTodos(storedTodos);
         } else {
+            // If no todos are stored in local storage, initialize with initialTodos
             setTodos(initialTodos);
-            storeArray('todos', initialTodos);
+            storeArray('todos', initialTodos); // Store initialTodos in local storage
         }
     }, []);
 

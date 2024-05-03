@@ -3,11 +3,10 @@ import Joi from "joi";
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Container, Icon, Message, Segment, Table } from 'semantic-ui-react';
-import initialTodos from "../data/todos.json";
-import { getArray, storeArray } from '../utils/store'; // Import the utility functions
 import AddTodoModal from './AddTodoModal';
 import ConfirmationModal from './ConfirmationModal';
 import EditTodoModal from './EditTodoModal';
+import { getArray, storeArray } from './localStorageUtils'; // Import the utility functions
 
 const schema = Joi.object({
     title: Joi.string().min(2).max(30).required().label("Title"),
@@ -26,12 +25,14 @@ const TodoListPage = () => {
     const [openEditModal, setOpenEditModal] = useState(false);
 
     useEffect(() => {
+        // Load todos from local storage when the component mounts
         const storedTodos = getArray('todos');
         if (storedTodos) {
             setTodos(storedTodos);
         } else {
+            // If no todos are stored in local storage, initialize with initialTodos
             setTodos(initialTodos);
-            storeArray('todos', initialTodos);
+            storeArray('todos', initialTodos); // Store initialTodos in local storage
         }
     }, []);
 

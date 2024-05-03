@@ -3,8 +3,6 @@ import Joi from "joi";
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Container, Icon, Message, Segment, Table } from 'semantic-ui-react';
-import initialTodos from "../data/todos.json";
-import { getArray, storeArray } from '../utils/store'; // Import the utility functions
 import AddTodoModal from './AddTodoModal';
 import ConfirmationModal from './ConfirmationModal';
 import EditTodoModal from './EditTodoModal';
@@ -15,6 +13,7 @@ const schema = Joi.object({
 });
 
 const TodoListPage = () => {
+    const [initialTodos, setInitialTodos] = useState([]);
     const [todos, setTodos] = useState([]);
     const [deleteId, setDeleteId] = useState(null);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -26,14 +25,14 @@ const TodoListPage = () => {
     const [openEditModal, setOpenEditModal] = useState(false);
 
     useEffect(() => {
-        const storedTodos = getArray('todos');
-        if (storedTodos) {
-            setTodos(storedTodos);
-        } else {
-            setTodos(initialTodos);
-            storeArray('todos', initialTodos);
-        }
+        setInitialTodos(initialTodos);
+        const storedTodos = localStorage.getItem('todos');
+        setTodos(storedTodos ? JSON.parse(storedTodos) : initialTodos);
     }, []);
+
+    useEffect(() => {
+        localStorage.setItem('todos', JSON.stringify(todos));
+    }, [todos]);
 
     const {
         register,
@@ -49,9 +48,7 @@ const TodoListPage = () => {
     };
 
     const handleConfirmDelete = () => {
-        const updatedTodos = todos.filter(todo => todo.id !== deleteId);
-        setTodos(updatedTodos);
-        storeArray('todos', updatedTodos); // Update todos in local storage
+        setTodos(todos.filter(todo => todo.id !== deleteId));
         setOpenDeleteModal(false);
         setShowMessage(true);
         setMessage('Todo deleted successfully.');
@@ -78,15 +75,13 @@ const TodoListPage = () => {
     };
 
     const handleCreateTodo = (data) => {
-        const newId = todos.length > 0 ? todos[todos.length - 1].id + 1 : 1;
+        const newId = todos.length + 1;
         const newTodo = {
             id: newId,
             title: data.title,
             description: data.description
         };
-        const updatedTodos = [...todos, newTodo];
-        setTodos(updatedTodos);
-        storeArray('todos', updatedTodos); // Update todos in local storage
+        setTodos([...todos, newTodo]);
         setOpenAddModal(false);
         setShowMessage(true);
         setMessage('Todo added successfully.');
@@ -103,7 +98,6 @@ const TodoListPage = () => {
             todo.id === editTodo.id ? { ...todo, title: data.title, description: data.description } : todo
         );
         setTodos(updatedTodos);
-        storeArray('todos', updatedTodos); // Update todos in local storage
         setOpenEditModal(false);
         setShowMessage(true);
         setMessage('Todo edited successfully.');
