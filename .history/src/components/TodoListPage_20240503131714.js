@@ -1,5 +1,3 @@
-import { joiResolver } from "@hookform/resolvers/joi";
-import Joi from "joi";
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Container, Icon, Message, Segment, Table } from 'semantic-ui-react';
@@ -7,12 +5,6 @@ import initialTodos from "../data/todos.json";
 import AddTodoModal from './AddTodoModal';
 import ConfirmationModal from './ConfirmationModal';
 import EditTodoModal from './EditTodoModal';
-
-
-const schema = Joi.object({
-    title: Joi.string().min(2).max(30).required().label("Title"),
-    description: Joi.string().min(2).max(500).required().label("Description"),
-});
 
 const TodoListPage = () => {
     const [todos, setTodos] = useState(initialTodos);
@@ -29,7 +21,6 @@ const TodoListPage = () => {
     const {
         register,
         handleSubmit,
-        reset,
         formState: { errors },
     } = useForm({ resolver: joiResolver(schema) });
 
@@ -78,7 +69,6 @@ const TodoListPage = () => {
         setOpenAddModal(false);
         setShowMessage(true);
         setMessage('Todo added successfully.');
-        reset();
     };
 
     const handleEdit = (todo) => {
@@ -167,9 +157,6 @@ const TodoListPage = () => {
                 open={openAddModal}
                 onClose={handleCloseAddModal}
                 onSubmit={handleCreateTodo}
-                register={register}
-                handleSubmit={handleSubmit}
-                errors={errors}
             />
 
             <EditTodoModal

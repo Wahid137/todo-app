@@ -1,11 +1,15 @@
+import Joi from 'joi';
 import React from 'react';
 import { Button, Form, FormField, Modal } from 'semantic-ui-react';
 
 
+const schema = Joi.object({
+    title: Joi.string().min(2).max(8).required().label("Title"),
+    description: Joi.string().min(2).max(5).required().label("Title"),
+});
 
 
-
-const AddTodoModal = ({ open, onClose, onSubmit, handleSubmit, register, errors }) => {
+const AddTodoModal = ({ open, onClose, onSubmit, handleSubmit, register, formState: { errors } }) => {
 
 
 

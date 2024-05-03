@@ -11,7 +11,7 @@ import EditTodoModal from './EditTodoModal';
 
 const schema = Joi.object({
     title: Joi.string().min(2).max(30).required().label("Title"),
-    description: Joi.string().min(2).max(500).required().label("Description"),
+    description: Joi.string().min(2).max(500).required().label("Title"),
 });
 
 const TodoListPage = () => {

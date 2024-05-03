@@ -10,8 +10,8 @@ import EditTodoModal from './EditTodoModal';
 
 
 const schema = Joi.object({
-    title: Joi.string().min(2).max(30).required().label("Title"),
-    description: Joi.string().min(2).max(500).required().label("Description"),
+    title: Joi.string().min(2).max(8).required().label("Title"),
+    description: Joi.string().min(2).max(5).required().label("Title"),
 });
 
 const TodoListPage = () => {
@@ -29,7 +29,6 @@ const TodoListPage = () => {
     const {
         register,
         handleSubmit,
-        reset,
         formState: { errors },
     } = useForm({ resolver: joiResolver(schema) });
 
@@ -78,7 +77,6 @@ const TodoListPage = () => {
         setOpenAddModal(false);
         setShowMessage(true);
         setMessage('Todo added successfully.');
-        reset();
     };
 
     const handleEdit = (todo) => {
@@ -169,7 +167,6 @@ const TodoListPage = () => {
                 onSubmit={handleCreateTodo}
                 register={register}
                 handleSubmit={handleSubmit}
-                errors={errors}
             />
 
             <EditTodoModal
