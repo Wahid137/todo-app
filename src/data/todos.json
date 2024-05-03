@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "title": "Complete project proposal",
+    "description": "Draft and finalize the project proposal for upcoming presentation."
+  },
+  {
+    "id": 2,
+    "title": "Prepare slides for team meeting",
+    "description": "Create slides covering progress, challenges, and next steps for the team meeting."
+  },
+  {
+    "id": 3,
+    "title": "Review code changes",
+    "description": "Review and provide feedback on recent code changes submitted by team members."
+  },
+  {
+    "id": 4,
+    "title": "Send status report to stakeholders",
+    "description": "Compile and send a status report to project stakeholders outlining current progress and upcoming tasks."
+  },
+  {
+    "id": 5,
+    "title": "Schedule client meeting",
+    "description": "Coordinate with the client to schedule a meeting to discuss project requirements and updates."
+  }
+]
